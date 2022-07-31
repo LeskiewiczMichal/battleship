@@ -27,9 +27,9 @@ const Gameboard = () => {
     }
   }
 
-  function checkForShipsLeft() {
-    if (ships === []) {
-      alert('no ships left');
+  function checkForShipsLeft(ships) {
+    if (ships.length === 0) {
+      return true;
     }
   }
 
@@ -48,12 +48,18 @@ const Gameboard = () => {
         }
       });
     }
-    checkForShipsLeft();
   };
 
   const getShips = () => ships;
   const getGameboard = () => gameboard;
-  return { getGameboard, placeNewShip, init, getShips, receiveAttack };
+  return {
+    getGameboard,
+    placeNewShip,
+    init,
+    getShips,
+    receiveAttack,
+    checkForShipsLeft,
+  };
 };
 
 export { Gameboard };

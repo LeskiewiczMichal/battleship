@@ -1,5 +1,7 @@
-import { Gameboard } from './functions/gameBoardFactory'
+import { Gameboard } from './functions/gameBoardFactory';
+import { bindStart } from './functions/DOM'
+import './style/style.css'
 
-const gb = Gameboard();
-gb.init()
-gb.receiveAttack(2)
+// const gameLoop = 
+
+bindStart()

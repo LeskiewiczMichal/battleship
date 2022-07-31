@@ -64,4 +64,9 @@ test('receiveattack sinks the ship correctly', () => {
   expect(shipsActual).toEqual(shipsExpected);
 });
 
-
+test('check for ships left', () => {
+  const gameboard = Gameboard();
+  gameboard.init();
+  const ships = gameboard.getShips();
+  expect(gameboard.checkForShipsLeft(ships)).toEqual(true);
+});
