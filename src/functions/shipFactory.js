@@ -1,5 +1,6 @@
-const Ship = (length) => {
-  let health = length;
+const Ship = (coordinates) => {
+  
+  let health = coordinates.length;
   let shipSunked = false;
 
   function isSunk() {
@@ -13,6 +14,7 @@ const Ship = (length) => {
     isSunk();
   };
 
+  const getCoordinates = () => coordinates
   const getHealth = () => health;
   const getSunkStatus = () => shipSunked;
 
@@ -20,6 +22,7 @@ const Ship = (length) => {
     hit,
     getHealth,
     getSunkStatus,
+    getCoordinates,
   };
 };
 
