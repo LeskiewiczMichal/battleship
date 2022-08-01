@@ -375,8 +375,23 @@
     background-color: rgb(211, 208, 208);
   }
 
-  #startGame:hover {
+  #startGame:hover,
+  #resetBtn:hover {
     background-color: rgb(137, 135, 135);
+  }
+
+  #resetBtn {
+    display: none;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 5px rgba(63, 61, 61, 0.75);
+    cursor: pointer;
+    background-color: rgb(211, 208, 208);
+    position: absolute;
+    top: 30px;
+    right: 20px;
   }
 
   .gameboard {
@@ -407,3 +422,28 @@
     width: 80vw;
     justify-content: space-between;
   }
+
+  .namesDisplay {
+    width: 80vw;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+  }
+
+  .playerName {
+    font-size: 1.5rem;
+    color: rgb(213, 61, 61);
+}
+
+.fade {
+    background-color: rgba(181, 173, 173, 0.171);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+.display {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: rgb(64, 39, 230);
+}
+  

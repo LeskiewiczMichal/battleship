@@ -1,4 +1,4 @@
-import { game } from '../functions/game';
+import { setWinner } from '../functions/game';
 
 // test('game creates two players and gameboards', () => {
 //     game.init();
@@ -7,3 +7,4 @@ import { game } from '../functions/game';
 //     // const playerOneGameboardExpected = const
 //     expect(playerOneGameboardActual).arrayContaining({hasShip: false, isShot: false})
 // })
+

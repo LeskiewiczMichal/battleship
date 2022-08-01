@@ -1,6 +1,7 @@
 import { Ship } from './shipFactory';
 
-const Gameboard = () => {
+const Gameboard = (name) => {
+  const playerName = name;
   let gameboard = [];
   let ships = [];
 
@@ -52,6 +53,7 @@ const Gameboard = () => {
 
   const getShips = () => ships;
   const getGameboard = () => gameboard;
+  const getPlayerName = () => playerName;
   return {
     getGameboard,
     placeNewShip,
@@ -59,6 +61,7 @@ const Gameboard = () => {
     getShips,
     receiveAttack,
     checkForShipsLeft,
+    getPlayerName,
   };
 };
 

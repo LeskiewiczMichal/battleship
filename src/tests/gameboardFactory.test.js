@@ -70,3 +70,9 @@ test('check for ships left', () => {
   const ships = gameboard.getShips();
   expect(gameboard.checkForShipsLeft(ships)).toEqual(true);
 });
+
+test('get Player Name', () => {
+    const gameboard = Gameboard('player');
+    gameboard.init();
+    expect(gameboard.getPlayerName()).toMatch('player');
+})
