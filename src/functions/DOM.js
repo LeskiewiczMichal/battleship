@@ -109,4 +109,4 @@ if (gameboard.getPlayerName() === 'player') {
 }
 
 
-export { bindStart }
+export { bindStart, renderGameboard, changePlayerMove, displayPlayerNames }
