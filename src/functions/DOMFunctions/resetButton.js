@@ -1,9 +1,13 @@
 import { gameInit, getComputer, getPlayerOne } from '../game';
-import { renderGameboard, changePlayerMove, displayPlayerNames } from '../DOM';
+import { renderGame } from '../DOM';
 
+// removes both gameboards and player names
+// game init creates players and places ships
+// makes reset button visible
+// renders everything
 function resetButtonFunctionality() {
   document.querySelectorAll('.gameboard').forEach((gameboard) => {
-    gameboard.remove()
+    gameboard.remove();
   });
 
   document.querySelector('.namesDisplay').remove();
@@ -13,13 +17,13 @@ function resetButtonFunctionality() {
   const playerGameboard = player.gameboard;
   const computer = getComputer();
   const computerGameboard = computer.gameboard;
-  renderGameboard(playerGameboard, 'player');
-  renderGameboard(computerGameboard, 'computer');
-  changePlayerMove('player');
-  displayPlayerNames('Player', 'Computer');}
+  renderGame(playerGameboard, computerGameboard);
+}
 
 const bindResetButton = () => {
-  document.querySelector('#resetBtn').addEventListener('click', resetButtonFunctionality);
+  document
+    .querySelector('#resetBtn')
+    .addEventListener('click', resetButtonFunctionality);
 };
 
 export { bindResetButton };

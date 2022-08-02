@@ -5,20 +5,22 @@ const Gameboard = (name) => {
   let gameboard = [];
   let ships = [];
 
+//   add elements to gameboard array
   const init = () => {
     for (let i = 0; i < 100; i++) {
       gameboard.push({ hasShip: false, isShot: false });
     }
   };
 
+//   places ship in gameboard array, adds it to ships array
   const placeNewShip = (coordinates) => {
     ships.push(Ship(coordinates));
     coordinates.forEach((coordinate) => {
       gameboard[coordinate].hasShip = true;
     });
-    // gameboard[coordinates].hasShip = true;
   };
 
+//   finds ship in ships array and removes it
   function sinkTheShip(ship) {
     for (let i = 0; i < ships.length; i++) {
       if (ships[i] === ship) {
@@ -34,8 +36,14 @@ const Gameboard = (name) => {
     }
   }
 
+//   takes coordinate, changes the gameboard array using it
   const receiveAttack = (coordinate) => {
+    // gameboard was shot
     gameboard[coordinate].isShot = true;
+
+    // if ship was placed on coordinates 
+    // finds ship in ships array by coordinates and hits it
+    // checks if the ship should be sank and fires sinkTheShip if needed
     if (gameboard[coordinate].hasShip === true) {
       ships.forEach((ship) => {
         const coords = ship.getCoordinates();

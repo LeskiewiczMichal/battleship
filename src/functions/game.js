@@ -3,6 +3,7 @@ import { Player } from './player';
 let playerOne;
 let computer;
 
+// create two players
 function gameInit() {
   playerOne = Player('player');
   computer = Player('Computer');

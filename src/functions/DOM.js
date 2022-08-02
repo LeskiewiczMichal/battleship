@@ -1,7 +1,13 @@
 import { gameInit, getComputer, getPlayerOne } from './game';
-import { disableFields, enableFields } from './DOMFunctions/disableAndAnableFields';
+import {
+  disableFields,
+  enableFields,
+} from './DOMFunctions/disableAndAnableFields';
 
 // bind start button to event and make it dissapear after click
+// game init creates players and places ships
+// makes reset button visible
+// renders everything
 const bindStart = () => {
   const startButton = document.querySelector('#startGame');
   startButton.addEventListener('click', () => {
@@ -11,84 +17,84 @@ const bindStart = () => {
     const player = getPlayerOne();
     const playerGameboard = player.gameboard;
     const computer = getComputer();
-    console.log(playerGameboard);
     const computerGameboard = computer.gameboard;
-    renderGameboard(playerGameboard, 'player');
-    renderGameboard(computerGameboard, 'computer');
-    changePlayerMove('player');
-    displayPlayerNames('Player', 'Computer');
-
+    renderGame(playerGameboard, computerGameboard);
   });
 };
 
-function renderGameboard(gameboard, player) {
+function renderGame(playerGameboard, computerGameboard) {
+  renderGameboard(playerGameboard);
+  renderGameboard(computerGameboard);
+  changePlayerMove(playerGameboard);
+  displayPlayerNames(playerGameboard, computerGameboard);
+}
+
+function renderGameboard(gameboard) {
   const newGameboard = document.createElement('div');
-  if (player === 'player') {
+  if (gameboard.getPlayerName() === 'player') {
     newGameboard.setAttribute('data-belongs-to', 'player');
   } else {
     newGameboard.setAttribute('data-belongs-to', 'computer');
   }
   newGameboard.classList = 'gameboard';
-  for (let i = 0; i < gameboard.getGameboard().length; i++) {
+  createField(gameboard, newGameboard);
+  document.querySelector('#boards').appendChild(newGameboard);
+}
+
+// creates field for every element in gameboard array;
+function createField(gameboard, newGameboard) {
+  const gameboardArray = gameboard.getGameboard();
+  for (let i = 0; i < gameboardArray.length; i++) {
     const field = document.createElement('button');
-    if (gameboard.getGameboard()[i].hasShip === true) {
-      field.setAttribute('data-hasShip', 'true');
-    }
-    if (player === 'player') {
-      field.setAttribute('data-player', 'player');
-    } else {
-      field.setAttribute('data-player', 'computer');
-    }
-    field.setAttribute('data-isShot', 'false');
     field.classList = 'field';
+    // on click fires receiveAttack function,
+    // changes shot fields color to darker,
+    // if shot field has ship in it changes the color to red to indicate that it was shot,
+    // disables field
+    // changes move to next player
+    // checks if player has any ships left, if not fires endGameScreen to show results
     field.addEventListener('click', () => {
-      if (gameboard.getGameboard()[i].hasShip === true) {
+        gameboard.receiveAttack(i);
+      if (gameboardArray[i].hasShip === true) {
         field.style.backgroundColor = 'rgb(223, 84, 84)';
       } else {
         field.style.backgroundColor = 'rgb(78, 77, 77)';
       }
-
       field.disabled = true;
-      field.setAttribute('data-isShot', 'true');
-      gameboard.receiveAttack(i);
-      if (player === 'player') {
-        changePlayerMove('player');
-      } else {
-        changePlayerMove('computer');
-      }
+      changePlayerMove(gameboard);
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
-       endGameScreen(gameboard);
+        endGameScreen(gameboard);
       }
     });
+
     newGameboard.appendChild(field);
   }
-  document.querySelector('#boards').appendChild(newGameboard);
 }
 
-function changePlayerMove(player) {
-//   const playerButtons = document.querySelectorAll('[data-player="player"]');
-//   const computerButtons = document.querySelectorAll('[data-player="computer"]');
+// takes player and diasbles his buttons, enabling enemy buttons
+// displays who's move is right now
+function changePlayerMove(gameboard) {
   const displayMove = document.querySelector('.display');
-
-  if (player === 'player') {
+  if (gameboard.getPlayerName() === 'player') {
     displayMove.innerText = 'Your move';
     disableFields('player');
-    enableFields('computer')
+    enableFields('computer');
   } else {
     displayMove.innerText = "Computer's move";
     disableFields('computer');
     enableFields('player');
-}
+  }
 }
 
-function displayPlayerNames(nameOne, nameTwo) {
+// displays player names under gameboards
+function displayPlayerNames(gameboardOne, gameboardTwo) {
   const nameDisplay = document.createElement('div');
   nameDisplay.classList = 'namesDisplay';
   const playerOne = document.createElement('p');
   const playerTwo = document.createElement('p');
-  playerOne.innerText = nameOne;
-  playerTwo.innerText = nameTwo;
+  playerOne.innerText = gameboardOne.getPlayerName();
+  playerTwo.innerText = gameboardTwo.getPlayerName();
   playerOne.classList = 'playerName';
   playerTwo.classList = 'playerName';
   nameDisplay.appendChild(playerOne);
@@ -96,17 +102,16 @@ function displayPlayerNames(nameOne, nameTwo) {
   document.querySelector('.wrapper').appendChild(nameDisplay);
 }
 
+// displays who won, disables all field buttons
 function endGameScreen(gameboard) {
-    const display = document.querySelector('.display');
-    disableFields('player');
-    disableFields('computer');
-if (gameboard.getPlayerName() === 'player') {
+  const display = document.querySelector('.display');
+  disableFields('player');
+  disableFields('computer');
+  if (gameboard.getPlayerName() === 'player') {
     display.innerText = 'Player Won';
-} else {
+  } else {
     display.innerText = 'Computer Won';
-};
-
+  }
 }
 
-
-export { bindStart, renderGameboard, changePlayerMove, displayPlayerNames }
+export { bindStart, renderGame };
