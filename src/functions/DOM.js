@@ -58,7 +58,7 @@ function renderGameboard(gameboard, player) {
       }
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
-        alert('end game');
+       endGameScreen(gameboard);
       }
     });
     newGameboard.appendChild(field);
