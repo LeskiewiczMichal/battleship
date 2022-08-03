@@ -3,6 +3,7 @@ import {
   disableFields,
   enableFields,
 } from './DOMFunctions/disableAndAnableFields';
+import { randomAttack } from './AI';
 
 // bind start button to event and make it dissapear after click
 // game init creates players and places ships
@@ -54,7 +55,7 @@ function createField(gameboard, newGameboard) {
     // changes move to next player
     // checks if player has any ships left, if not fires endGameScreen to show results
     field.addEventListener('click', () => {
-        gameboard.receiveAttack(i);
+      gameboard.receiveAttack(i);
       if (gameboardArray[i].hasShip === true) {
         field.style.backgroundColor = 'rgb(223, 84, 84)';
       } else {
@@ -62,6 +63,12 @@ function createField(gameboard, newGameboard) {
       }
       field.disabled = true;
       changePlayerMove(gameboard);
+      if (gameboard.getPlayerName() === 'Computer') {
+        const playerGameboard = document.querySelector(
+          '[data-belongs-to="player"]'
+        ).childNodes;
+        randomAttack(playerGameboard);
+      }
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
         endGameScreen(gameboard);
@@ -108,9 +115,9 @@ function endGameScreen(gameboard) {
   disableFields('player');
   disableFields('computer');
   if (gameboard.getPlayerName() === 'player') {
-    display.innerText = 'Player Won';
-  } else {
     display.innerText = 'Computer Won';
+  } else {
+    display.innerText = 'Player Won';
   }
 }
 
