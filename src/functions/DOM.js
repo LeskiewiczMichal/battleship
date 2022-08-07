@@ -13,7 +13,7 @@ const bindStart = () => {
   const startButton = document.querySelector('#startGame');
   startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
-    // gameInit();
+    document.querySelector('#ships-selection').style.display = 'none';
     document.querySelector('#resetBtn').style.display = 'block';
     const player = getPlayerOne();
     const playerGameboard = player.gameboard;
@@ -130,4 +130,11 @@ function endGameScreen(gameboard) {
   }
 }
 
-export { bindStart, renderGame };
+function renderShipsSelection() {
+    const template = document.querySelector('#ships-selection-template');
+    const templateClone = template.content.cloneNode(true);
+    const wrapper = document.querySelector('.wrapper');
+    wrapper.insertBefore(templateClone, wrapper.firstChild);
+}
+
+export { bindStart, renderGame, renderShipsSelection };
