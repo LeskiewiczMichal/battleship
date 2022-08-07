@@ -13,7 +13,7 @@ const bindStart = () => {
   const startButton = document.querySelector('#startGame');
   startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
-    gameInit();
+    // gameInit();
     document.querySelector('#resetBtn').style.display = 'block';
     const player = getPlayerOne();
     const playerGameboard = player.gameboard;
@@ -45,6 +45,7 @@ function renderGameboard(gameboard) {
 // creates field for every element in gameboard array;
 function createField(gameboard, newGameboard) {
   const gameboardArray = gameboard.getGameboard();
+//   console.log(gameboardArray)
   for (let i = 0; i < gameboardArray.length; i++) {
     const field = document.createElement('button');
     field.classList = 'field';

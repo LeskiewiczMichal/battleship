@@ -8,8 +8,9 @@ function gameInit() {
   playerOne = Player('player');
   computer = Player('Computer');
 
-  playerOne.gameboard.placeNewShip([1, 2]);
-  computer.gameboard.placeNewShip([5, 6, 7]);
+
+//   playerOne.gameboard.placeNewShip([1, 2]);
+  computer.gameboard.placeNewShip([1, 2]);
 }
 
 
