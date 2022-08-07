@@ -26,11 +26,37 @@ function changeColors(e) {
   }
 
   //   select length of ship elements from container
+  let abortFunction = false;
+  let indexOfTargetCopy = indexOfTarget.valueOf();
   for (let i = 0; i < currentDrag.children.length; i++) {
-    if (container[indexOfTarget + i].className !== 'disabled') {
-      container[indexOfTarget + i].className = 'space red';
+    if (container[indexOfTargetCopy].className === 'disabled') {
+      abortFunction = true;
+    }
+    if (currentDrag.classList.contains('horizontal')) {
+      indexOfTargetCopy += 1;
+    } else {
+      indexOfTargetCopy += 10;
     }
   }
+  if (abortFunction === true) {
+    return;
+  }
+
+  //   select elements based on ships length from container
+//   and change their color
+  for (let i = 0; i < currentDrag.children.length; i++) {
+    // if (container[indexOfTarget].className !== 'disabled') {
+      container[indexOfTarget].className = 'space red';
+    // }
+    if (currentDrag.classList.contains('horizontal')) {
+      indexOfTarget += 1;
+    } else {
+      indexOfTarget += 10;
+    }
+  }
+  // } else {
+
+  // }
 }
 
 function dragLeave(e) {
@@ -47,23 +73,32 @@ function dragLeave(e) {
 
   //   select length of ship elements from container
   for (let i = 0; i < currentDrag.children.length; i++) {
-    // CHANGE CLASSNAME !!!!!!!!!!!!!!!!!!!
-    if (container[indexOfTarget + i].className !== 'disabled') {
-      container[indexOfTarget + i].className = 'space';
+    if (container[indexOfTarget].className !== 'disabled') {
+      container[indexOfTarget].className = 'space';
+    }
+    if (currentDrag.classList.contains('horizontal')) {
+      indexOfTarget += 1;
+    } else {
+      indexOfTarget += 10;
     }
   }
 }
 
 function drop(e) {
   e.preventDefault();
+
   //   get target element
   const data = e.dataTransfer.getData('text');
+  const ship = document.getElementsByClassName(`${data}`)[0];
+
   //   get children of ship target element
-  const shipChildren = document.getElementsByClassName(`${data}`)[0].children;
+  const shipChildren = ship.children;
   const shipElements = [...shipChildren];
+
   //   right now only horizontal
   const dragSelector = document.querySelector('#drag-ships').children;
   const spaces = [...dragSelector];
+
   //   needed for forEach later to select elements
   let indexOfSpace;
   for (let i = 0; i < spaces.length; i++) {
@@ -71,27 +106,36 @@ function drop(e) {
       indexOfSpace = i;
     }
   }
-  //   -1 so forEach selects good first element
-  indexOfSpace -= 1;
+
   let indexOfSpaceCopy = indexOfSpace.valueOf();
   //   if fields are occupides this is used to abort later
   let abortFunction = false;
-  //   check if fields are not occupied
+
   shipElements.forEach(() => {
-    indexOfSpaceCopy += 1;
+    //   indexOfSpaceCopy += 1;
     if (spaces[indexOfSpaceCopy].firstChild) {
       abortFunction = true;
+    }
+    if (ship.classList.contains('horizontal')) {
+      indexOfSpaceCopy += 1;
+    } else {
+      indexOfSpaceCopy += 10;
     }
   });
 
   if (abortFunction === true) {
     // change colors back
     shipElements.forEach(() => {
-      indexOfSpace += 1;
+      // indexOfSpace += 1;
       if (spaces[indexOfSpace].className === 'disabled') {
         return;
+      }
+      spaces[indexOfSpace].className = 'space';
+
+      if (ship.classList.contains('horizontal')) {
+        indexOfSpace += 1;
       } else {
-        spaces[indexOfSpace].className = 'space';
+        indexOfSpace += 10;
       }
     });
     // abort fuction
@@ -103,10 +147,15 @@ function drop(e) {
 
   //   pushes appends ship child element to place on gameboard and adds coordinates for it
   shipElements.forEach((element) => {
-    indexOfSpace += 1;
+    //   indexOfSpace += 1;
     coordinates.push(indexOfSpace);
     spaces[indexOfSpace].appendChild(element);
     spaces[indexOfSpace].className = 'disabled';
+    if (ship.classList.contains('horizontal')) {
+      indexOfSpace += 1;
+    } else {
+      indexOfSpace += 10;
+    }
   });
 
   //   place new ships on gameboard
@@ -121,9 +170,9 @@ function getTarget(e) {
 }
 
 const dragHandlersInit = () => {
-    // get from DOM
-    const emptySpaces = document.querySelectorAll('.space');
-    const ships = document.querySelectorAll('.ship');
+  // get from DOM
+  const emptySpaces = document.querySelectorAll('.space');
+  const ships = document.querySelectorAll('.ship');
 
   //   needed to change between vertical and horizontal position onclick
   bindShipsClickFunctionality(ships);

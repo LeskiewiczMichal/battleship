@@ -8,7 +8,7 @@ const Gameboard = (name) => {
 //   add elements to gameboard array
   const init = () => {
     for (let i = 0; i < 100; i++) {
-      gameboard.push({ hasShip: false, isShot: false });
+      gameboard.push({ hasShip: false, isShot: false, shipSunk: false });
     }
   };
 
@@ -51,6 +51,10 @@ const Gameboard = (name) => {
           if (coords[i] === coordinate) {
             ship.hit();
             if (ship.getSunkStatus() === true) {
+                const shipCoords = ship.getCoordinates();
+                shipCoords.forEach((coord) => {
+                    gameboard[coord].shipSunk = true;
+                })
               sinkTheShip(ship);
             }
           }

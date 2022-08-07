@@ -439,6 +439,10 @@
   .space.grey {
     background-color: grey;
   }
+
+  .ship {
+    cursor: pointer;
+  }
   
   .ship.horizontal {
     /* position: absolute; */

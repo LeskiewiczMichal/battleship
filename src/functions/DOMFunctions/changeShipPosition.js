@@ -1,5 +1,4 @@
 function changeShipsPosition(e) {
-    console.log(e.target.parentElement)
   const ship = e.target.parentElement;
   if (ship.classList.contains('horizontal')) {
     ship.classList.remove('horizontal');

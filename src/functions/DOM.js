@@ -57,10 +57,18 @@ function createField(gameboard, newGameboard) {
     // checks if player has any ships left, if not fires endGameScreen to show results
     field.addEventListener('click', () => {
       gameboard.receiveAttack(i);
+    //   get ships
+    // forEach ship
       if (gameboardArray[i].hasShip === true) {
         field.style.backgroundColor = 'rgb(223, 84, 84)';
       } else {
         field.style.backgroundColor = 'rgb(78, 77, 77)';
+      }
+      for (let i = 0; i < gameboardArray.length; i++) {
+        if (gameboardArray[i].shipSunk === true) {
+            const newGameboardChildren = newGameboard.children;
+            newGameboardChildren[i].style.backgroundColor = 'black';
+        }
       }
       field.disabled = true;
       changePlayerMove(gameboard);
