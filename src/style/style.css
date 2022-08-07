@@ -383,23 +383,27 @@
   /* ship selection */
   #ships-selection {
     display: flex;
-    width: 900px;
-    height: 400px;
+    width: 1200px;
+    height: 500px;
     justify-content: space-between;
+    align-items: center;
     gap: 20px;
   }
 
   #ships-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
-    
+    padding: 10px;
     gap: 30px;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 0 0 5px black;
     /* position: relative; */
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 500px;
     background-color: grey;
   }
 
@@ -436,11 +440,16 @@
     background-color: grey;
   }
   
-  .ship {
+  .ship.horizontal {
     /* position: absolute; */
     display: flex;
     /* flex-direction: column; */
     /* border: 1px solid white; */
+  }
+
+  .ship.vertical {
+    display: flex;
+    flex-direction: column;
   }
 
   /* .ship.biggest {
