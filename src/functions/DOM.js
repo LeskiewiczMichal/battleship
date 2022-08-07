@@ -13,7 +13,7 @@ const bindStart = () => {
   const startButton = document.querySelector('#startGame');
   startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
-    document.querySelector('#ships-selection').style.display = 'none';
+    document.querySelector('#ships-selection').remove();
     document.querySelector('#resetBtn').style.display = 'block';
     const player = getPlayerOne();
     const playerGameboard = player.gameboard;

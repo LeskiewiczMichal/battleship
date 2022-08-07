@@ -1,10 +1,8 @@
 import { Player } from './player';
-import { Gameboard } from './functions/gameBoardFactory';
-import { bindStart, renderShipsSelection } from './functions/DOM';
-import { bindResetButton } from './functions/DOMFunctions/resetButton';
-import './style/style.css';
-import { gameInit, getPlayerOne } from './functions/game';
-import { dragHandlersInit } from './functions/DOMFunctions/dragHandlers';
+import { Gameboard } from './gameBoardFactory';
+import { bindStart, renderShipsSelection } from './DOM';
+import { bindResetButton } from './DOMFunctions/resetButton';
+import { dragHandlersInit } from './DOMFunctions/dragHandlers';
 
 // const gameLoop =
 
