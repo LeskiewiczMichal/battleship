@@ -1,3 +1,7 @@
+// TODO
+//  CANNOT SET SHIP IF NOT IN ONE LINE IN GAMEBOARD
+// SHIPS CANNOT WRAP
+// 
 import { getPlayerOne } from '../game';
 import { bindShipsClickFunctionality } from './changeShipPosition';
 

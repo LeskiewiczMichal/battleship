@@ -73,10 +73,10 @@ function createField(gameboard, newGameboard) {
       field.disabled = true;
       changePlayerMove(gameboard);
       if (gameboard.getPlayerName() === 'Computer') {
-        const playerGameboard = document.querySelector(
+        const playerGameboardRendered = document.querySelector(
           '[data-belongs-to="player"]'
         ).childNodes;
-        randomAttack(playerGameboard);
+        randomAttack(playerGameboardRendered, getPlayerOne().gameboard.getGameboard());
       }
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
