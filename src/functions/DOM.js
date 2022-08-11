@@ -3,7 +3,7 @@ import {
   disableFields,
   enableFields,
 } from './DOMFunctions/disableAndAnableFields';
-import { randomAttack } from './AI';
+import { computerMove } from './AI';
 
 // bind start button to event and make it dissapear after click
 // game init creates players and places ships
@@ -76,7 +76,7 @@ function createField(gameboard, newGameboard) {
         const playerGameboardRendered = document.querySelector(
           '[data-belongs-to="player"]'
         ).childNodes;
-        randomAttack(playerGameboardRendered, getPlayerOne().gameboard.getGameboard());
+        computerMove(playerGameboardRendered, getPlayerOne().gameboard.getGameboard());
       }
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
