@@ -1,9 +1,10 @@
 // TODO
 //  CANNOT SET SHIP IF NOT IN ONE LINE IN GAMEBOARD
 // SHIPS CANNOT WRAP
-// 
+//
 import { getPlayerOne } from '../game';
 import { bindShipsClickFunctionality } from './changeShipPosition';
+import { checkIfShipBreaksLine } from './checkIfShipBreaksLine';
 
 // const biggestship = document.querySelector('.biggest');
 // const emptySpaces = document.querySelectorAll('.space');
@@ -32,12 +33,17 @@ function changeColors(e) {
   //   select length of ship elements from container
   let abortFunction = false;
   let indexOfTargetCopy = indexOfTarget.valueOf();
+  const indexOriginal = indexOfTargetCopy.valueOf();
   for (let i = 0; i < currentDrag.children.length; i++) {
     if (container[indexOfTargetCopy].className === 'disabled') {
       abortFunction = true;
     }
     if (currentDrag.classList.contains('horizontal')) {
       indexOfTargetCopy += 1;
+      if (abortFunction === false) {
+        // if ship breaks line returns true to abortFunction
+        abortFunction = checkIfShipBreaksLine(indexOriginal, indexOfTargetCopy);
+      }
     } else {
       indexOfTargetCopy += 10;
     }
@@ -47,10 +53,10 @@ function changeColors(e) {
   }
 
   //   select elements based on ships length from container
-//   and change their color
+  //   and change their color
   for (let i = 0; i < currentDrag.children.length; i++) {
     // if (container[indexOfTarget].className !== 'disabled') {
-      container[indexOfTarget].className = 'space red';
+    container[indexOfTarget].className = 'space red';
     // }
     if (currentDrag.classList.contains('horizontal')) {
       indexOfTarget += 1;
@@ -117,7 +123,12 @@ function drop(e) {
 
   shipElements.forEach(() => {
     //   indexOfSpaceCopy += 1;
-    if (spaces[indexOfSpaceCopy].firstChild) {
+    // if (spaces[indexOfSpaceCopy].firstChild) {
+    //   abortFunction = true;
+    // }
+
+    // if changeColor doesnt work it doesnt check properly as well
+    if (!spaces[indexOfSpaceCopy].classList.contains('red')) {
       abortFunction = true;
     }
     if (ship.classList.contains('horizontal')) {
