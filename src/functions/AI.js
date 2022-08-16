@@ -248,4 +248,44 @@ function getRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-export { computerMove };
+function randomShipPlacement(computerGameboard) {
+  // łódki - 4, dwie 3, trzy 2, cztery 1
+  const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  for (let i = 0; i < ships.length; i++) {
+    let coords;
+    if (randomizeShipPosition() === 'horizontal') {
+      coords = getRandomCoords(ships[i], 'horizontal');
+      computerGameboard.placeNewShip(coords);
+
+    } else {
+    //   coords = getRandomCoords(ships[i], 'vertical');
+    }
+    // computerGameboard.placeNewShip(coords);
+  }
+}
+
+function getRandomCoords(shipLength, position) {
+  const coords = [];
+  const firstCoord = Math.floor(Math.random() * (100 - 0 + 1)) + 0;
+  coords.push(firstCoord);
+  for (let j = 1; j < shipLength; j++) {
+    if (position === 'horizontal') {
+      const nextCoord = coords[coords.length - 1] + 1;
+      coords.push(nextCoord);
+    } else {
+      const nextCoord = coords[coords.length - 1] + 10;
+      coords.push(nextCoord);
+    }
+  }
+  return coords;
+}
+function randomizeShipPosition() {
+  const newNumber = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+  if (newNumber === 0) {
+    return 'horizontal';
+  } else {
+    return 'vertical';
+  }
+}
+
+export { computerMove, randomShipPlacement, randomizeShipPosition };
