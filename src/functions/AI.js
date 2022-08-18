@@ -249,30 +249,54 @@ function getRandom(list) {
 }
 
 function randomShipPlacement(computerGameboard) {
-  // łódki - 4, dwie 3, trzy 2, cztery 1
   const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
   for (let i = 0; i < ships.length; i++) {
     let coords;
-    if (randomizeShipPosition() === 'horizontal') {
-      coords = getRandomCoords(ships[i], 'horizontal');
-      computerGameboard.placeNewShip(coords);
-
+    if (exports.randomizeShipPosition() === 'horizontal') {
+      coords = exports.getRandomCoords(ships[i], 'horizontal');
     } else {
-    //   coords = getRandomCoords(ships[i], 'vertical');
+      coords = exports.getRandomCoords(ships[i], 'vertical', computerGameboard);
     }
-    // computerGameboard.placeNewShip(coords);
+    computerGameboard.placeNewShip(coords);
   }
 }
 
-function getRandomCoords(shipLength, position) {
+function getRandomCoords(shipLength, position, gameboard) {
   const coords = [];
-  const firstCoord = Math.floor(Math.random() * (100 - 0 + 1)) + 0;
-  coords.push(firstCoord);
-  for (let j = 1; j < shipLength; j++) {
-    if (position === 'horizontal') {
+
+  if (position === 'horizontal') {
+    //   100 - shipLength makes it so ship cannot go over 100th field
+    const firstCoord =
+      Math.floor(Math.random() * (100 - shipLength - 0 + 1)) + 0;
+    //   make sure that ships dont stack over each other
+    while (
+      checkIfCoordsHaveShip(firstCoord, gameboard, shipLength, position) ===
+      true
+    ) {
+      firstCoord =
+        Math.floor(Math.random() * (100 - shipLength * 10 - 0 + 1)) + 0;
+    }
+    coords.push(firstCoord);
+    // add next coord horizontally for each corresponding ship space
+    for (let j = 1; j < shipLength; j++) {
       const nextCoord = coords[coords.length - 1] + 1;
       coords.push(nextCoord);
-    } else {
+    }
+  } else {
+    //   100 - shipLength * 10 makes it so ship cannot go over 100th field
+    const firstCoord =
+      Math.floor(Math.random() * (100 - shipLength * 10 - 0 + 1)) + 0;
+    //   make sure that ships dont stack over each other
+    while (
+      checkIfCoordsHaveShip(firstCoord, gameboard, shipLength, position) ===
+      true
+    ) {
+      firstCoord =
+        Math.floor(Math.random() * (100 - shipLength * 10 - 0 + 1)) + 0;
+    }
+    coords.push(firstCoord);
+    // add next coord vertically for each corresponding ship space
+    for (let j = 1; j < shipLength; j++) {
       const nextCoord = coords[coords.length - 1] + 10;
       coords.push(nextCoord);
     }
@@ -280,12 +304,43 @@ function getRandomCoords(shipLength, position) {
   return coords;
 }
 function randomizeShipPosition() {
+    // random 0 or 1
   const newNumber = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
   if (newNumber === 0) {
     return 'horizontal';
-  } else {
-    return 'vertical';
   }
+  return 'vertical';
 }
 
-export { computerMove, randomShipPlacement, randomizeShipPosition };
+// checks if coords that you want to place ship on don't already have a ship
+function checkIfCoordsHaveShip(firstCoord, gameboard, shipLength, position) {
+  const gameboardArray = gameboard.getGameboard();
+  let firstCoordCopy = firstCoord.valueOf();
+  if (gameboardArray[firstCoordCopy].hasShip === true) {
+    return true;
+  }
+  if (position === 'horizontal') {
+    for (let i = 1; i < shipLength; i++) {
+      firstCoordCopy += 1;
+      if (gameboardArray[firstCoordCopy].hasShip === true) {
+        return true;
+      }
+    }
+  } else {
+    for (let i = 1; i < shipLength; i++) {
+      firstCoordCopy += 10;
+      if (gameboardArray[firstCoordCopy].hasShip === true) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+export {
+  computerMove,
+  randomShipPlacement,
+  randomizeShipPosition,
+  getRandomCoords,
+  checkIfCoordsHaveShip,
+};
