@@ -1,36 +1,29 @@
 import { Player } from './player';
-import { bindStart, renderShipsSelection } from './DOM';
+import { bindStart, renderShipsSelection, renderWrapper } from './DOM';
 import { bindResetButton } from './DOMFunctions/resetButton';
 import { dragHandlersInit } from './DOMFunctions/dragHandlers';
-import { randomShipPlacement } from './AI'
-
-// const gameLoop =
-
-
-
+import { randomShipPlacement } from './AI';
 
 let playerOne;
 let computer;
 
-// create two players
+// create two players and place ships on computer gameboard
 function gameInit() {
   playerOne = Player('player');
   computer = Player('Computer');
-//   playerOne.gameboard.placeNewShip([1, 2]);
-randomShipPlacement(computer.gameboard)
+  randomShipPlacement(computer.gameboard);
 }
 
 const initialLoad = () => {
-    bindStart();
-    renderShipsSelection();
-    bindResetButton();
-    gameInit();
-    dragHandlersInit();
-}
-
-
+    renderWrapper()
+  bindStart();
+  renderShipsSelection();
+  bindResetButton();
+  gameInit();
+  dragHandlersInit();
+};
 
 const getPlayerOne = () => playerOne;
 const getComputer = () => computer;
 
-export { gameInit, getComputer, getPlayerOne, initialLoad};
+export { gameInit, getComputer, getPlayerOne, initialLoad };

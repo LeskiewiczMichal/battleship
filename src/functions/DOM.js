@@ -1,4 +1,4 @@
-import { gameInit, getComputer, getPlayerOne } from './game';
+import { getComputer, getPlayerOne } from './game';
 import {
   disableFields,
   enableFields,
@@ -12,7 +12,7 @@ import { computerMove } from './AI';
 const bindStart = () => {
   const startButton = document.querySelector('#startGame');
   startButton.addEventListener('click', () => {
-    startButton.style.display = 'none';
+    startButton.remove();
     document.querySelector('#ships-selection').remove();
     document.querySelector('#resetBtn').style.display = 'block';
     const player = getPlayerOne();
@@ -45,7 +45,7 @@ function renderGameboard(gameboard) {
 // creates field for every element in gameboard array;
 function createField(gameboard, newGameboard) {
   const gameboardArray = gameboard.getGameboard();
-//   console.log(gameboardArray)
+  //   console.log(gameboardArray)
   for (let i = 0; i < gameboardArray.length; i++) {
     const field = document.createElement('button');
     field.classList = 'field';
@@ -57,8 +57,6 @@ function createField(gameboard, newGameboard) {
     // checks if player has any ships left, if not fires endGameScreen to show results
     field.addEventListener('click', () => {
       gameboard.receiveAttack(i);
-    //   get ships
-    // forEach ship
       if (gameboardArray[i].hasShip === true) {
         field.style.backgroundColor = 'rgb(223, 84, 84)';
       } else {
@@ -66,8 +64,8 @@ function createField(gameboard, newGameboard) {
       }
       for (let i = 0; i < gameboardArray.length; i++) {
         if (gameboardArray[i].shipSunk === true) {
-            const newGameboardChildren = newGameboard.children;
-            newGameboardChildren[i].style.backgroundColor = 'black';
+          const newGameboardChildren = newGameboard.children;
+          newGameboardChildren[i].style.backgroundColor = 'black';
         }
       }
       field.disabled = true;
@@ -76,7 +74,10 @@ function createField(gameboard, newGameboard) {
         const playerGameboardRendered = document.querySelector(
           '[data-belongs-to="player"]'
         ).childNodes;
-        computerMove(playerGameboardRendered, getPlayerOne().gameboard.getGameboard());
+        computerMove(
+          playerGameboardRendered,
+          getPlayerOne().gameboard.getGameboard()
+        );
       }
       const ships = gameboard.getShips();
       if (gameboard.checkForShipsLeft(ships) === true) {
@@ -131,10 +132,16 @@ function endGameScreen(gameboard) {
 }
 
 function renderShipsSelection() {
-    const template = document.querySelector('#ships-selection-template');
-    const templateClone = template.content.cloneNode(true);
-    const wrapper = document.querySelector('.wrapper');
-    wrapper.insertBefore(templateClone, wrapper.firstChild);
+  const template = document.querySelector('#ships-selection-template');
+  const templateClone = template.content.cloneNode(true);
+  const wrapper = document.querySelector('.wrapper');
+  wrapper.insertBefore(templateClone, wrapper.firstChild);
 }
 
-export { bindStart, renderGame, renderShipsSelection };
+function renderWrapper() {
+    const template = document.querySelector('#wrapper-template');
+    const templateClone = template.content.cloneNode(true);
+    document.querySelector('body').appendChild(templateClone)
+}
+ 
+export { bindStart, renderGame, renderShipsSelection, renderWrapper };

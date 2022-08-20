@@ -1,19 +1,12 @@
-// TODO
-//  CANNOT SET SHIP IF NOT IN ONE LINE IN GAMEBOARD
-// SHIPS CANNOT WRAP
-//
 import { getPlayerOne } from '../game';
 import { bindShipsClickFunctionality } from './changeShipPosition';
 import { checkIfShipBreaksLine } from './checkIfShipBreaksLine';
 
-// const biggestship = document.querySelector('.biggest');
-// const emptySpaces = document.querySelectorAll('.space');
 let currentDrag;
 
 function dragoOverHandler(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
-  //   e.target.style.backgroundColor = 'black'
 }
 
 // make user see where they are placing ships
@@ -55,22 +48,16 @@ function changeColors(e) {
   //   select elements based on ships length from container
   //   and change their color
   for (let i = 0; i < currentDrag.children.length; i++) {
-    // if (container[indexOfTarget].className !== 'disabled') {
     container[indexOfTarget].className = 'space red';
-    // }
     if (currentDrag.classList.contains('horizontal')) {
       indexOfTarget += 1;
     } else {
       indexOfTarget += 10;
     }
   }
-  // } else {
-
-  // }
 }
 
 function dragLeave(e) {
-  //   e.preventDefault();
   const container = document.querySelector('#drag-ships').children;
   //   needed to set style of found element later
   let indexOfTarget;
@@ -122,11 +109,6 @@ function drop(e) {
   let abortFunction = false;
 
   shipElements.forEach(() => {
-    //   indexOfSpaceCopy += 1;
-    // if (spaces[indexOfSpaceCopy].firstChild) {
-    //   abortFunction = true;
-    // }
-
     // if changeColor doesnt work it doesnt check properly as well
     if (!spaces[indexOfSpaceCopy].classList.contains('red')) {
       abortFunction = true;
@@ -141,7 +123,6 @@ function drop(e) {
   if (abortFunction === true) {
     // change colors back
     shipElements.forEach(() => {
-      // indexOfSpace += 1;
       if (spaces[indexOfSpace].className === 'disabled') {
         return;
       }
@@ -162,7 +143,6 @@ function drop(e) {
 
   //   pushes appends ship child element to place on gameboard and adds coordinates for it
   shipElements.forEach((element) => {
-    //   indexOfSpace += 1;
     coordinates.push(indexOfSpace);
     spaces[indexOfSpace].appendChild(element);
     spaces[indexOfSpace].className = 'disabled';

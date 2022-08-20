@@ -3,8 +3,6 @@ import { Gameboard } from '../functions/gameBoardFactory';
 test('placenewship changes gameboard', () => {
   const gameboard = Gameboard();
   gameboard.init();
-  //   const oldGameboard = gameboard.gameboard;
-
   gameboard.placeNewShip([1, 12]);
   const actual = gameboard.getGameboard().find((val) => val.hasShip === true);
   const expected = { hasShip: true };
@@ -14,8 +12,6 @@ test('placenewship changes gameboard', () => {
 test('placenewship changes gameboard', () => {
   const gameboard = Gameboard();
   gameboard.init();
-  //   const oldGameboard = gameboard.gameboard;
-
   gameboard.placeNewShip([1, 12]);
   const actual = gameboard.getGameboard()[12];
   const expected = { hasShip: true };
@@ -72,7 +68,7 @@ test('check for ships left', () => {
 });
 
 test('get Player Name', () => {
-    const gameboard = Gameboard('player');
-    gameboard.init();
-    expect(gameboard.getPlayerName()).toMatch('player');
-})
+  const gameboard = Gameboard('player');
+  gameboard.init();
+  expect(gameboard.getPlayerName()).toMatch('player');
+});

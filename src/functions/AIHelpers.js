@@ -1,3 +1,5 @@
+import { checkIfShipBreaksLine } from './DOMFunctions/checkIfShipBreaksLine';
+
 const shipPlacementHelpers = (() => {
   function getRandomCoords(shipLength, position, gameboard) {
     const coords = [];
@@ -6,13 +8,16 @@ const shipPlacementHelpers = (() => {
       //   100 - shipLength makes it so ship cannot go over 100th field
       let firstCoord =
         Math.floor(Math.random() * (100 - shipLength - 0 + 1)) + 0;
+      let lastCoord = firstCoord + shipLength - 1;
       //   make sure that ships dont stack over each other
       while (
         checkIfCoordsHaveShip(firstCoord, gameboard, shipLength, position) ===
-        true
+          true ||
+        checkIfShipBreaksLine(firstCoord, lastCoord) === true
       ) {
         firstCoord =
           Math.floor(Math.random() * (100 - shipLength * 10 - 0 + 1)) + 0;
+        lastCoord = firstCoord + shipLength - 1;
       }
       coords.push(firstCoord);
       // add next coord horizontally for each corresponding ship space
@@ -92,106 +97,162 @@ const computerMoveHelpers = (() => {
   }
 
   // callStack
-  let callStack = {};
+  const callstack = (() => {
+    let callStack = {};
 
-  function createCallStackFirstHit(fields) {
-    const initialParam = getFirstHitParam();
-    if (fields[initialParam + 1] && !fields[initialParam + 1].disabled) {
-      callStack.right = fields[initialParam + 1];
+    //   creates callstack to try out different sides of
+    // ship that was shot, untill one of them hits and this callstack resets to the next
+    function createFirstHit(fields) {
+      const initialParam = getFirstHitParam();
+      if (fields[initialParam + 1] && !fields[initialParam + 1].disabled) {
+        callStack.right = fields[initialParam + 1];
+      }
+      if (fields[initialParam - 1] && !fields[initialParam - 1].disabled) {
+        callStack.left = fields[initialParam - 1];
+      }
+      if (fields[initialParam + 10] && !fields[initialParam + 10].disabled) {
+        callStack.down = fields[initialParam + 10];
+      }
+      if (fields[initialParam - 10] && !fields[initialParam - 10].disabled) {
+        callStack.up = fields[initialParam - 10];
+      }
     }
-    if (fields[initialParam - 1] && !fields[initialParam - 1].disabled) {
-      callStack.left = fields[initialParam - 1];
-    }
-    if (fields[initialParam + 10] && !fields[initialParam + 10].disabled) {
-      callStack.down = fields[initialParam + 10];
-    }
-    if (fields[initialParam - 10] && !fields[initialParam - 10].disabled) {
-      callStack.up = fields[initialParam - 10];
-    }
-  }
 
-  function createCallStackHorizontal(fields) {
-    const initialParam = getFirstHitParam();
-    if (fields[initialParam + 1] && !fields[initialParam + 1].disabled) {
-      callStack.one = fields[initialParam + 1];
+    //   if position horizontal this adds horizontal fields to callstack
+    function createHorizontal(fields) {
+      const initialParam = getFirstHitParam();
+      if (fields[initialParam + 1] && !fields[initialParam + 1].disabled) {
+        callStack.one = fields[initialParam + 1];
+      }
+      if (fields[initialParam + 2] && !fields[initialParam + 2].disabled) {
+        callStack.two = fields[initialParam + 2];
+      }
+      if (fields[initialParam + 3] && !fields[initialParam + 3].disabled) {
+        callStack.three = fields[initialParam + 3];
+      }
+      if (fields[initialParam - 1] && !fields[initialParam - 1].disabled) {
+        callStack.four = fields[initialParam - 1];
+      }
+      if (fields[initialParam - 2] && !fields[initialParam - 2].disabled) {
+        callStack.five = fields[initialParam - 2];
+      }
+      if (fields[initialParam - 3] && !fields[initialParam - 3].disabled) {
+        callStack.six = fields[initialParam - 3];
+      }
     }
-    if (fields[initialParam + 2] && !fields[initialParam + 2].disabled) {
-      callStack.two = fields[initialParam + 2];
-    }
-    if (fields[initialParam + 3] && !fields[initialParam + 3].disabled) {
-      callStack.three = fields[initialParam + 3];
-    }
-    if (fields[initialParam - 1] && !fields[initialParam - 1].disabled) {
-      callStack.four = fields[initialParam - 1];
-    }
-    if (fields[initialParam - 2] && !fields[initialParam - 2].disabled) {
-      callStack.five = fields[initialParam - 2];
-    }
-    if (fields[initialParam - 3] && !fields[initialParam - 3].disabled) {
-      callStack.six = fields[initialParam - 3];
-    }
-  }
 
-  function createCallStackVertical(fields) {
-    const initialParam = getFirstHitParam();
-    if (fields[initialParam + 10] && !fields[initialParam + 10].disabled) {
-      callStack.one = fields[initialParam + 10];
+    //   if position vertical this adds vertical fields to callstack
+    function createVertical(fields) {
+      const initialParam = getFirstHitParam();
+      if (fields[initialParam + 10] && !fields[initialParam + 10].disabled) {
+        callStack.one = fields[initialParam + 10];
+      }
+      if (fields[initialParam + 20] && !fields[initialParam + 20].disabled) {
+        callStack.two = fields[initialParam + 20];
+      }
+      if (fields[initialParam + 30] && !fields[initialParam + 30].disabled) {
+        callStack.three = fields[initialParam + 30];
+      }
+      if (fields[initialParam - 10] && !fields[initialParam - 10].disabled) {
+        callStack.four = fields[initialParam - 10];
+      }
+      if (fields[initialParam - 20] && !fields[initialParam - 20].disabled) {
+        callStack.five = fields[initialParam - 20];
+      }
+      if (fields[initialParam - 30] && !fields[initialParam - 30].disabled) {
+        callStack.six = fields[initialParam - 30];
+      }
     }
-    if (fields[initialParam + 20] && !fields[initialParam + 20].disabled) {
-      callStack.two = fields[initialParam + 20];
-    }
-    if (fields[initialParam + 30] && !fields[initialParam + 30].disabled) {
-      callStack.three = fields[initialParam + 30];
-    }
-    if (fields[initialParam - 10] && !fields[initialParam - 10].disabled) {
-      callStack.four = fields[initialParam - 10];
-    }
-    if (fields[initialParam - 20] && !fields[initialParam - 20].disabled) {
-      callStack.five = fields[initialParam - 20];
-    }
-    if (fields[initialParam - 30] && !fields[initialParam - 30].disabled) {
-      callStack.six = fields[initialParam - 30];
-    }
-  }
 
-  // shoots callStack one, two, three if ship position is know;
-  function shootCallStack() {
-    const callStack = getCallStack();
-    if (callStack.hasOwnProperty('one')) {
-      callStack.one.click();
-      delete callStack.one;
-    } else if (callStack.hasOwnProperty('two')) {
-      callStack.two.click();
-      delete callStack.two;
-    } else if (callStack.hasOwnProperty('three')) {
-      callStack.three.click();
-      delete callStack.three;
-    } else if (callStack.hasOwnProperty('four')) {
-      callStack.four.click();
-      delete callStack.four;
-    } else if (callStack.hasOwnProperty('five')) {
-      callStack.five.click();
-      delete callStack.five;
-    } else if (callStack.hasOwnProperty('six')) {
-      callStack.six.click();
-      delete callStack.six;
+    // shoots horizontal or vertical callstack;
+    function shootAll() {
+      const callStack = getCallStack();
+      if (callStack.hasOwnProperty('one')) {
+        callStack.one.click();
+        delete callStack.one;
+      } else if (callStack.hasOwnProperty('two')) {
+        callStack.two.click();
+        delete callStack.two;
+      } else if (callStack.hasOwnProperty('three')) {
+        callStack.three.click();
+        delete callStack.three;
+      } else if (callStack.hasOwnProperty('four')) {
+        callStack.four.click();
+        delete callStack.four;
+      } else if (callStack.hasOwnProperty('five')) {
+        callStack.five.click();
+        delete callStack.five;
+      } else if (callStack.hasOwnProperty('six')) {
+        callStack.six.click();
+        delete callStack.six;
+      }
     }
-  }
 
-  function getCallStack() {
-    return callStack;
-  }
+    // attack each property and remove it untill one hits the ship
+    // if it does hit, set relative ship position and reset call stack
+    // for further attacking
+    const shootToCheckPosition = (callStack, fields, gameboardArray) => {
+      if (callStack.hasOwnProperty('right')) {
+        callStack.right.click();
+        const indexOfField = getFieldIndex(callStack.right, fields);
+        if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
+          changeShipPosition('horizontal');
+          resetCallStack();
+        }
+        delete callStack.right;
+      } else if (callStack.hasOwnProperty('left')) {
+        callStack.left.click();
+        const indexOfField = getFieldIndex(callStack.left, fields);
+        if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
+          changeShipPosition('horizontal');
+          resetCallStack();
+        }
+        delete callStack.left;
+      } else if (callStack.hasOwnProperty('up')) {
+        callStack.up.click();
+        const indexOfField = getFieldIndex(callStack.up, fields);
+        if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
+          changeShipPosition('vertical');
+          resetCallStack();
+        }
+        delete callStack.up;
+      } else if (callStack.hasOwnProperty('down')) {
+        callStack.down.click();
+        const indexOfField = getFieldIndex(callStack.down, fields);
+        if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
+          changeShipPosition('vertical');
+          resetCallStack();
+        }
+        delete callStack.down;
+      }
+    };
 
-  function resetCallStack() {
-    callStack = {};
-  }
-
-  function callStackEmpty() {
-    if (Object.keys(callStack).length === 0) {
-      return true;
+    function get() {
+      return callStack;
     }
-    return false;
-  }
+
+    function reset() {
+      callStack = {};
+    }
+
+    function isEmpty() {
+      if (Object.keys(callStack).length === 0) {
+        return true;
+      }
+      return false;
+    }
+
+    return {
+      isEmpty,
+      reset,
+      get,
+      shootAll,
+      createVertical,
+      createHorizontal,
+      createFirstHit,
+      shootToCheckPosition,
+    };
+  })();
 
   // get fields index
   function getFieldIndex(field, fields) {
@@ -233,6 +294,28 @@ const computerMoveHelpers = (() => {
     return list[Math.floor(Math.random() * list.length)];
   }
 
+  const randomField = (() => {
+    let field = 0;
+
+    function attack(fields) {
+      const fielteredFields = fields.filter(isNotShotAlready);
+      field = getRandom(fielteredFields);
+      field.click();
+    }
+
+    function findIndex(fields) {
+      let returnVal = null;
+      for (let i = 0; i < fields.length; i++) {
+        if (fields[i] === field) {
+          returnVal = i;
+        }
+      }
+      return returnVal;
+    }
+
+    return { attack, findIndex };
+  })();
+
   return {
     getRandom,
     isNotShotAlready,
@@ -240,15 +323,10 @@ const computerMoveHelpers = (() => {
     changeShipPosition,
     checkIfShipHitAndNotSunk,
     getFieldIndex,
-    callStackEmpty,
-    resetCallStack,
-    getCallStack,
-    shootCallStack,
-    createCallStackVertical,
-    createCallStackHorizontal,
-    createCallStackFirstHit,
+    callstack,
     getFirstHitParam,
     setFirstHitParam,
+    randomField,
   };
 })();
 

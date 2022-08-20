@@ -2,11 +2,6 @@ import * as AI from '../functions/AI';
 import * as game from '../functions/game';
 import { Player } from '../functions/player';
 import { shipPlacementHelpers } from '../functions/AIHelpers';
-import {
-  mockRandomForEach,
-  mockRandom,
-  resetMockRandom,
-} from 'jest-mock-random';
 
 afterEach(() => {
   // restore the spy created with spyOn
@@ -20,7 +15,9 @@ describe('randomShipPlacement', () => {
 
   test('placing ships randomly mocked horizontal', () => {
     const computerPlayer = Player('computer');
-    jest.spyOn(shipPlacementHelpers, 'randomizeShipPosition').mockReturnValue('horizontal');
+    jest
+      .spyOn(shipPlacementHelpers, 'randomizeShipPosition')
+      .mockReturnValue('horizontal');
     jest
       .spyOn(shipPlacementHelpers, 'getRandomCoords')
       .mockReturnValueOnce([0, 1, 2, 3])
@@ -142,7 +139,9 @@ describe('randomShipPlacement', () => {
 
   test('placing ships randomly mocked vertical', () => {
     const computerPlayer = Player('computer');
-    jest.spyOn(shipPlacementHelpers, 'randomizeShipPosition').mockReturnValue('vertical');
+    jest
+      .spyOn(shipPlacementHelpers, 'randomizeShipPosition')
+      .mockReturnValue('vertical');
     jest
       .spyOn(shipPlacementHelpers, 'getRandomCoords')
       .mockReturnValueOnce([0, 10, 20, 30])
@@ -270,7 +269,14 @@ describe('helpers', () => {
     const shipLength = 3;
     const firstCoord = 1;
     const shipPosition = 'horizontal';
-    expect(shipPlacementHelpers.checkIfCoordsHaveShip(firstCoord, computerGameboard, shipLength, shipPosition)).toEqual(true);
+    expect(
+      shipPlacementHelpers.checkIfCoordsHaveShip(
+        firstCoord,
+        computerGameboard,
+        shipLength,
+        shipPosition
+      )
+    ).toEqual(true);
   });
 
   test('checkifcoordshaveship return expected value vertical', () => {
@@ -280,6 +286,13 @@ describe('helpers', () => {
     const shipLength = 4;
     const firstCoord = 20;
     const shipPosition = 'vertical';
-    expect(shipPlacementHelpers.checkIfCoordsHaveShip(firstCoord, computerGameboard, shipLength, shipPosition)).toEqual(true);
+    expect(
+      shipPlacementHelpers.checkIfCoordsHaveShip(
+        firstCoord,
+        computerGameboard,
+        shipLength,
+        shipPosition
+      )
+    ).toEqual(true);
   });
 });

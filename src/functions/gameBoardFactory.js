@@ -2,17 +2,17 @@ import { Ship } from './shipFactory';
 
 const Gameboard = (name) => {
   const playerName = name;
-  let gameboard = [];
-  let ships = [];
+  const gameboard = [];
+  const ships = [];
 
-//   add elements to gameboard array
+  //   add elements to gameboard array
   const init = () => {
     for (let i = 0; i < 100; i++) {
       gameboard.push({ hasShip: false, isShot: false, shipSunk: false });
     }
   };
 
-//   places ship in gameboard array, adds it to ships array
+  //   places ship in gameboard array, adds it to ships array
   const placeNewShip = (coordinates) => {
     ships.push(Ship(coordinates));
     coordinates.forEach((coordinate) => {
@@ -20,7 +20,7 @@ const Gameboard = (name) => {
     });
   };
 
-//   finds ship in ships array and removes it
+  //   finds ship in ships array and removes it
   function sinkTheShip(ship) {
     for (let i = 0; i < ships.length; i++) {
       if (ships[i] === ship) {
@@ -36,12 +36,12 @@ const Gameboard = (name) => {
     }
   }
 
-//   takes coordinate, changes the gameboard array using it
+  //   takes coordinate, changes the gameboard array using it
   const receiveAttack = (coordinate) => {
     // gameboard was shot
     gameboard[coordinate].isShot = true;
 
-    // if ship was placed on coordinates 
+    // if ship was placed on coordinates
     // finds ship in ships array by coordinates and hits it
     // checks if the ship should be sank and fires sinkTheShip if needed
     if (gameboard[coordinate].hasShip === true) {
@@ -51,10 +51,10 @@ const Gameboard = (name) => {
           if (coords[i] === coordinate) {
             ship.hit();
             if (ship.getSunkStatus() === true) {
-                const shipCoords = ship.getCoordinates();
-                shipCoords.forEach((coord) => {
-                    gameboard[coord].shipSunk = true;
-                })
+              const shipCoords = ship.getCoordinates();
+              shipCoords.forEach((coord) => {
+                gameboard[coord].shipSunk = true;
+              });
               sinkTheShip(ship);
             }
           }
