@@ -1,6 +1,7 @@
 import { getPlayerOne } from '../game';
 import { bindShipsClickFunctionality } from './changeShipPosition';
 import { checkIfShipBreaksLine } from './checkIfShipBreaksLine';
+import * as index from '../indexActions';
 
 let currentDrag;
 
@@ -13,32 +14,26 @@ function dragoOverHandler(e) {
 function changeColors(e) {
   const container = document.querySelector('#drag-ships').children;
 
-  //   needed to set style of found element later
-  let indexOfTarget;
-
-  //   find current mouseover target
-  for (let i = 0; i < container.length; i++) {
-    if (container[i] === e.target) {
-      indexOfTarget = i;
-    }
-  }
+  //   find current mouseover target, needed to set style of found element later
+  let indexOfTarget = index.find(container, e.target);
 
   //   select length of ship elements from container
   let abortFunction = false;
   let indexOfTargetCopy = indexOfTarget.valueOf();
   const indexOriginal = indexOfTargetCopy.valueOf();
+
   for (let i = 0; i < currentDrag.children.length; i++) {
+    // if already taken or shot abort function
     if (container[indexOfTargetCopy].className === 'disabled') {
       abortFunction = true;
     }
-    if (currentDrag.classList.contains('horizontal')) {
-      indexOfTargetCopy += 1;
-      if (abortFunction === false) {
-        // if ship breaks line returns true to abortFunction
-        abortFunction = checkIfShipBreaksLine(indexOriginal, indexOfTargetCopy);
-      }
-    } else {
-      indexOfTargetCopy += 10;
+    indexOfTargetCopy = index.update(currentDrag, indexOfTargetCopy);
+    // if horizontal check if ship doesn't brake the line when placing it
+    if (
+      currentDrag.classList.contains('horizontal') &&
+      abortFunction === false
+    ) {
+      abortFunction = checkIfShipBreaksLine(indexOriginal, indexOfTargetCopy);
     }
   }
   if (abortFunction === true) {
@@ -49,90 +44,63 @@ function changeColors(e) {
   //   and change their color
   for (let i = 0; i < currentDrag.children.length; i++) {
     container[indexOfTarget].className = 'space red';
-    if (currentDrag.classList.contains('horizontal')) {
-      indexOfTarget += 1;
-    } else {
-      indexOfTarget += 10;
-    }
+    indexOfTarget = index.update(currentDrag, indexOfTarget);
   }
 }
 
 function dragLeave(e) {
   const container = document.querySelector('#drag-ships').children;
-  //   needed to set style of found element later
-  let indexOfTarget;
-  //   find current mouseover target
-  for (let i = 0; i < container.length; i++) {
-    if (container[i] === e.target) {
-      indexOfTarget = i;
-    }
-  }
+  //   find current mouseover target index
+  let indexOfTarget = index.find(container, e.target);
 
-  //   select length of ship elements from container
+  //   select as many elements from container as ship length and change their class back to default
   for (let i = 0; i < currentDrag.children.length; i++) {
     if (container[indexOfTarget].className !== 'disabled') {
       container[indexOfTarget].className = 'space';
     }
-    if (currentDrag.classList.contains('horizontal')) {
-      indexOfTarget += 1;
-    } else {
-      indexOfTarget += 10;
-    }
+    indexOfTarget = index.update(currentDrag, indexOfTarget);
   }
 }
 
 function drop(e) {
   e.preventDefault();
 
+  //   DECLARE VALUES
   //   get target element
   const data = e.dataTransfer.getData('text');
   const ship = document.getElementsByClassName(`${data}`)[0];
-
   //   get children of ship target element
   const shipChildren = ship.children;
   const shipElements = [...shipChildren];
-
   //   right now only horizontal
   const dragSelector = document.querySelector('#drag-ships').children;
   const spaces = [...dragSelector];
-
-  //   needed for forEach later to select elements
-  let indexOfSpace;
-  for (let i = 0; i < spaces.length; i++) {
-    if (spaces[i] === e.target) {
-      indexOfSpace = i;
-    }
-  }
-
+  //   needed later to select elements
+  let indexOfSpace = index.find(spaces, e.target);
   let indexOfSpaceCopy = indexOfSpace.valueOf();
-  //   if fields are occupides this is used to abort later
+  //   if fields are occupide this is used to abort later
   let abortFunction = false;
 
+  //   if a field that you dragged the ship over is already red abort function later
   shipElements.forEach(() => {
-    // if changeColor doesnt work it doesnt check properly as well
+    // this forEach depends on changeColor to work
     if (!spaces[indexOfSpaceCopy].classList.contains('red')) {
       abortFunction = true;
     }
-    if (ship.classList.contains('horizontal')) {
-      indexOfSpaceCopy += 1;
-    } else {
-      indexOfSpaceCopy += 10;
-    }
+    indexOfSpaceCopy = index.update(ship, indexOfSpaceCopy);
   });
 
   if (abortFunction === true) {
     // change colors back
     shipElements.forEach(() => {
+      // don't change spaces already occupied by other ships
       if (spaces[indexOfSpace].className === 'disabled') {
         return;
       }
+      //   return to default 'space' className
       spaces[indexOfSpace].className = 'space';
-
-      if (ship.classList.contains('horizontal')) {
-        indexOfSpace += 1;
-      } else {
-        indexOfSpace += 10;
-      }
+      //   gets next space in next forEach loop
+      indexOfSpace = index.update(ship, indexOfSpace);
     });
     // abort fuction
     return;
@@ -140,17 +108,14 @@ function drop(e) {
 
   //   used in placeNewShip function to pass ship coordinates
   const coordinates = [];
-
-  //   pushes appends ship child element to place on gameboard and adds coordinates for it
+  //   appends ship child element to place on gameboard and saves coordinates for it
+  //   makes field disabled for further use
+  //   indexupdate is used to get next field in next foreach round
   shipElements.forEach((element) => {
     coordinates.push(indexOfSpace);
     spaces[indexOfSpace].appendChild(element);
     spaces[indexOfSpace].className = 'disabled';
-    if (ship.classList.contains('horizontal')) {
-      indexOfSpace += 1;
-    } else {
-      indexOfSpace += 10;
-    }
+    indexOfSpace = index.update(ship, indexOfSpace);
   });
 
   //   place new ships on gameboard

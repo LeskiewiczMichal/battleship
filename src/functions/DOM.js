@@ -4,6 +4,7 @@ import {
   enableFields,
 } from './DOMFunctions/disableAndAnableFields';
 import { computerMove } from './AI';
+import { changeFieldColor } from './DOMFunctions/changeFieldColor';
 
 // bind start button to event and make it dissapear after click
 // game init creates players and places ships
@@ -57,17 +58,7 @@ function createField(gameboard, newGameboard) {
     // checks if player has any ships left, if not fires endGameScreen to show results
     field.addEventListener('click', () => {
       gameboard.receiveAttack(i);
-      if (gameboardArray[i].hasShip === true) {
-        field.style.backgroundColor = 'rgb(223, 84, 84)';
-      } else {
-        field.style.backgroundColor = 'rgb(78, 77, 77)';
-      }
-      for (let i = 0; i < gameboardArray.length; i++) {
-        if (gameboardArray[i].shipSunk === true) {
-          const newGameboardChildren = newGameboard.children;
-          newGameboardChildren[i].style.backgroundColor = 'black';
-        }
-      }
+      changeFieldColor(field, gameboardArray, i, newGameboard);
       field.disabled = true;
       changePlayerMove(gameboard);
       if (gameboard.getPlayerName() === 'Computer') {
@@ -139,9 +130,9 @@ function renderShipsSelection() {
 }
 
 function renderWrapper() {
-    const template = document.querySelector('#wrapper-template');
-    const templateClone = template.content.cloneNode(true);
-    document.querySelector('body').appendChild(templateClone)
+  const template = document.querySelector('#wrapper-template');
+  const templateClone = template.content.cloneNode(true);
+  document.querySelector('body').appendChild(templateClone);
 }
- 
+
 export { bindStart, renderGame, renderShipsSelection, renderWrapper };

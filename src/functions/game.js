@@ -15,7 +15,7 @@ function gameInit() {
 }
 
 const initialLoad = () => {
-    renderWrapper()
+  renderWrapper();
   bindStart();
   renderShipsSelection();
   bindResetButton();

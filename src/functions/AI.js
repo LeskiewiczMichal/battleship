@@ -53,7 +53,11 @@ const computerMove = (playerFields, gameboardArray) => {
     // if it does hit, set relative ship position and reset call stack
     // for further attacking
     const callStack = computerMoveHelpers.callstack.get();
-    computerMoveHelpers.callstack.shootToCheckPosition(callStack, fields, gameboardArray)
+    computerMoveHelpers.callstack.shootToCheckPosition(
+      callStack,
+      fields,
+      gameboardArray
+    );
   }
 };
 

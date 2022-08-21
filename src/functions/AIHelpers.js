@@ -166,7 +166,7 @@ const computerMoveHelpers = (() => {
 
     // shoots horizontal or vertical callstack;
     function shootAll() {
-      const callStack = getCallStack();
+      const callStack = get();
       if (callStack.hasOwnProperty('one')) {
         callStack.one.click();
         delete callStack.one;
@@ -197,7 +197,7 @@ const computerMoveHelpers = (() => {
         const indexOfField = getFieldIndex(callStack.right, fields);
         if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
           changeShipPosition('horizontal');
-          resetCallStack();
+          reset();
         }
         delete callStack.right;
       } else if (callStack.hasOwnProperty('left')) {
@@ -205,7 +205,7 @@ const computerMoveHelpers = (() => {
         const indexOfField = getFieldIndex(callStack.left, fields);
         if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
           changeShipPosition('horizontal');
-          resetCallStack();
+          reset();
         }
         delete callStack.left;
       } else if (callStack.hasOwnProperty('up')) {
@@ -213,7 +213,7 @@ const computerMoveHelpers = (() => {
         const indexOfField = getFieldIndex(callStack.up, fields);
         if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
           changeShipPosition('vertical');
-          resetCallStack();
+          reset();
         }
         delete callStack.up;
       } else if (callStack.hasOwnProperty('down')) {
@@ -221,7 +221,7 @@ const computerMoveHelpers = (() => {
         const indexOfField = getFieldIndex(callStack.down, fields);
         if (checkIfShipHitAndNotSunk(indexOfField, gameboardArray)) {
           changeShipPosition('vertical');
-          resetCallStack();
+          reset();
         }
         delete callStack.down;
       }
